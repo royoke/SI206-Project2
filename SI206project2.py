@@ -27,8 +27,14 @@ from bs4 import BeautifulSoup
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(s):
-    pass
-    #Your code here
+    url_list = []
+    first_urls = re.findall('http://\S+[.]+\S+', s)
+    second_urls = re.findall('https://\S+[.]+\S+', s)
+    for url in first_urls:
+        url_list.append(url)
+    for url in second_urls:
+        url_list.append(url)
+    return url_list
 
 
 
@@ -38,8 +44,16 @@ def find_urls(s):
 ## http://www.michigandaily.com/section/opinion
 
 def grab_headlines():
-    pass
-    #Your code here
+    
+    f = open('opinion.html','r')
+    file = f.read()
+    f.close()
+    soup = BeautifulSoup(file, 'html.parser')
+    headline_div = soup.find_all('div', {'class': 'view view-most-read view-id-most_read view-display-id-panel_pane_1 view-dom-id-99658157999dd0ac5aa62c2b284dd266'})
+    for tag in headline_div:
+        headlines = tag.text.strip('\n').split('\n')
+    return headlines
+
 
 
 
@@ -108,15 +122,15 @@ def main():
 if __name__ == '__main__':
     main()
 
-© 2017 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-API
-Training
-Shop
-Blog
-About
+#© 2017 GitHub, Inc.
+#Terms
+#Privacy
+#Security
+#Status
+#Help
+#Contact GitHub
+#API
+#Training
+#Shop
+#Blog
+#About
