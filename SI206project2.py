@@ -84,7 +84,11 @@ def get_umsi_data():
 ## INPUT: The dictionary from get_umsi_data().
 ## OUTPUT: Return number of PhD students in the data.  (Don't forget, I may change the input data)
 def num_students(data):
-    pass
+    count = 0
+    for title in data.values():
+        if title == 'PhD student':
+            count += 1
+    return count
     #Your code here
 
 
