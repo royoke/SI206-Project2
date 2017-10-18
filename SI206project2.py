@@ -39,10 +39,9 @@ def find_urls(s):
 
 def grab_headlines():
     
-    f = open('opinion.html','r') # Opening the opion file
-    file = f.read()
-    f.close()
-    soup = BeautifulSoup(file, 'html.parser') #creating contents of file into a BeautifulSoup object
+    url = 'http://www.michigandaily.com/section/opinion'
+    data = requests.get(url)
+    soup = BeautifulSoup(data.text, 'html.parser') #creating contents of file into a BeautifulSoup object
     headline_div = soup.find_all('div', {'class': 'view view-most-read view-id-most_read view-display-id-panel_pane_1 view-dom-id-99658157999dd0ac5aa62c2b284dd266'})
     for tag in headline_div:
         headlines = tag.text.strip('\n').split('\n') #goes int div where the list of top headlines is located and adds the text to a list and removes the new line charachter
@@ -69,13 +68,13 @@ def get_umsi_data():
         if page == 0:
             base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All'
         else:
-            base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page={}'.format(str(page))
+            base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page={}'.format(str(page)) #changes url page number
         data = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
         soup = BeautifulSoup(data.text, 'html.parser')
-        people = soup.find_all('div', {'class': 'field-item even', 'property': 'dc:title'})
-        position = soup.find_all('div', {'class': 'field field-name-field-person-titles field-type-text field-label-hidden'})
+        people = soup.find_all('div', {'class': 'field-item even', 'property': 'dc:title'}) #gets all the headers/names
+        position = soup.find_all('div', {'class': 'field field-name-field-person-titles field-type-text field-label-hidden'}) #gets all the titles/descriptions
         for num in range(len(people)):
-            umsi_titles[people[num].text] = position[num].text
+            umsi_titles[people[num].text] = position[num].text #matches name with title
     return umsi_titles
     
     #Your code here
@@ -86,7 +85,7 @@ def get_umsi_data():
 def num_students(data):
     count = 0
     for title in data.values():
-        if title == 'PhD student':
+        if title == 'PhD student': #if someones title is phd student the count will increase, thus counting all phd students
             count += 1
     return count
     #Your code here
